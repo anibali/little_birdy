@@ -1,42 +1,4 @@
 class String
-  alias :oOo_gsub :gsub
-  alias :oOo_gsub! :gsub!
-  
-  # Behaves the same as String#gsub from the standard library, except when
-  # passed a hash. In this case, each substring matching a key in the hash is
-  # replaced with the associated value. String keys are matched exactly
-  # (they do not behave like regular expressions).
-  #
-  # @example Substitute parts of a string
-  #   ".1a2a".gsub '.' => 'F', /.a/ => 'o' #=> "Foo"
-  def gsub *args, &block
-    if args.one? and args[0].is_a? Hash and not block_given?
-      hash = args[0]
-      keys = hash.keys.map { |k| k.is_a?(Regexp) ? k : Regexp.escape(k)}
-      oOo_gsub /(#{keys.join("|")})/ do |match|
-        replacement = nil
-        hash.each do |r, v|
-          if match == r or (r.is_a?(Regexp) and match.match(r))
-            replacement = v
-            break
-          end
-        end
-        replacement
-      end
-    else
-      oOo_gsub *args, &block
-    end
-  end
-  
-  # Performs String#gsub in place.
-  def gsub! *args, &block
-    if args.one? and args[0].is_a? Hash and not block_given?
-      replace(gsub *args, &block)
-    else
-      oOo_gsub! *args, &block
-    end
-  end
-  
   # Truncates a string by replacing central characters with an ellipsis.
   #
   # @param [Integer] len the number of characters to keep from the original string.
@@ -69,6 +31,45 @@ class String
   # @return [Boolean] true if the string ends with the specified suffix.
   def ends_with? suffix
     self[-suffix.length..-1] == suffix
+  end
+  
+  alias :_old_gsub :gsub
+  alias :_old_gsub! :gsub!
+  
+  # Behaves the same as String#gsub from the standard library, except when
+  # passed a hash. In this case, each substring matching a key in the hash is
+  # replaced with the associated value. String keys are matched exactly
+  # (they do not behave like regular expressions).
+  #
+  # @example Substitute parts of a string
+  #   ".1a2a".gsub '.' => 'F', /.a/ => 'o' #=> "Foo"
+  def gsub *args, &block
+    _little_birdy_gsub method(:_old_gsub), *args, &block
+  end
+  
+  # Performs String#gsub in place.
+  def gsub! *args, &block
+    _little_birdy_gsub method(:_old_gsub!), *args, &block
+  end
+  
+  private
+  def _little_birdy_gsub gsub_method, *args, &block
+    if args.one? and args[0].is_a? Hash and not block_given?
+      hash = args[0]
+      keys = hash.keys.map { |k| k.is_a?(Regexp) ? k : Regexp.escape(k)}
+      gsub_method.call /(#{keys.join("|")})/ do |match|
+        replacement = nil
+        hash.each do |r, v|
+          if match == r or (r.is_a?(Regexp) and match.match(r))
+            replacement = v
+            break
+          end
+        end
+        replacement
+      end
+    else
+      gsub_method.call *args, &block
+    end
   end
 end
 
