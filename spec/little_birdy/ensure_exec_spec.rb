@@ -38,7 +38,7 @@ end
 describe Module do
   describe "#module_exec" do
     it "should not change if it is already defined" do
-      # Define instance_exec
+      # Define module_exec
       Module.class_eval do
         def module_exec
           "unchanged"
@@ -51,7 +51,7 @@ describe Module do
     end
     
     it "should be added if it is not defined" do
-      # Undefine instance_exec
+      # Undefine module_exec
       if Module.respond_to?(:module_exec)
         Module.class_eval do
           undef module_exec
