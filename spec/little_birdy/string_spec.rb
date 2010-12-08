@@ -15,6 +15,14 @@ describe String do
     it "should perform substitutions according to the passed hash" do
       "Ha1y Birth2".gsub('1' => 'pp', '2' => 'day').should == "Happy Birthday"
     end
+    
+    it "should escape string keys in hash" do
+      "a.c".gsub('.' => 'b').should == 'abc'
+    end
+    
+    it "should handle regular expression keys in hash" do
+      "a.c".gsub(/./ => 'b').should == 'bbb'
+    end
   end
   
   describe "#gsub!" do

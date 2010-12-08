@@ -4,18 +4,19 @@ class String
   
   # Behaves the same as String#gsub from the standard library, except when
   # passed a hash. In this case, each substring matching a key in the hash is
-  # replaced with the associated value.
+  # replaced with the associated value. String keys are matched exactly
+  # (they do not behave like regular expressions).
   #
   # @example Substitute parts of a string
-  #   "Hello world".gsub /.o/ => 'l', 'rl' => 'a' #=> "Hell lad"
+  #   ".1a2a".gsub '.' => 'F', /.a/ => 'o' #=> "Foo"
   def gsub *args, &block
     if args.one? and args[0].is_a? Hash and not block_given?
       hash = args[0]
-      regex = /(#{hash.keys.join("|")})/
-      oOo_gsub regex do |match|
+      keys = hash.keys.map { |k| k.is_a?(Regexp) ? k : Regexp.escape(k)}
+      oOo_gsub /(#{keys.join("|")})/ do |match|
         replacement = nil
         hash.each do |r, v|
-          if match.match r
+          if match == r or (r.is_a?(Regexp) and match.match(r))
             replacement = v
             break
           end
@@ -27,7 +28,7 @@ class String
     end
   end
   
-  # Performs String#gsub! in place.
+  # Performs String#gsub in place.
   def gsub! *args, &block
     if args.one? and args[0].is_a? Hash and not block_given?
       replace(gsub *args, &block)
