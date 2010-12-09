@@ -11,9 +11,10 @@ handy extensions and if I like them, I'll add them.
 Features
 --------
 
-* Pretty String truncation with `String#ellipsize`
+* Pretty string truncation with `String#ellipsize`
 * Easy substitution with `String#gsub` and a hash
-* Safe navigation with `_?`
+* [Safe navigation](http://groovy.codehaus.org/Operators#Operators-SafeNavigationOperator%28%3F.%29)
+  with `_?`
 * Ensured presence of `module_exec` and `instance_exec`
 * `Kernel#Symbol` to accompany the similar `Kernel#String`
 * And more...
