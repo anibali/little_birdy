@@ -18,5 +18,6 @@ Features
 * Ensured presence of `module_exec` and `instance_exec`
 * `Kernel#Symbol` to accompany the similar `Kernel#String`
 * Location of a file's nth parent with `File.dirname`
+* Filename sanitation with `File.sanitize`
 * And more...
 
