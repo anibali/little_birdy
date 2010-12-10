@@ -16,6 +16,7 @@ Features
 * [Safe navigation](http://groovy.codehaus.org/Operators#Operators-SafeNavigationOperator%28%3F.%29)
   with `_?`
 * Ensured presence of `module_exec` and `instance_exec`
+* __DIR__ to accompany __FILE__
 * `Kernel#Symbol` to accompany the similar `Kernel#String`
 * Simpler handling of missing libraries with `Kernel#try_require`
 * Location of a file's nth parent with `File.dirname`

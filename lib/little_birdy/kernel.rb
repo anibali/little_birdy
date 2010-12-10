@@ -34,5 +34,15 @@ module Kernel
       return false
     end
   end
+  
+  # Returns the directory containing the current Ruby file. The result should
+  # be exactly the same as evaluating
+  # `File.dirname(File.expand_path(__FILE__))`.
+  #
+  # @return [String] the directory containing the current Ruby file.
+  def __DIR__
+    file = caller[0].split(':')[0..-2].join(':')
+    File.dirname(File.expand_path(file))
+  end unless defined? __DIR__ # Perhaps __DIR__ will be part of Ruby some day...
 end
 

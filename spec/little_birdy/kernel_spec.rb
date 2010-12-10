@@ -31,5 +31,17 @@ describe Kernel do
       try_require('little_birdy').should be_true
     end
   end
+  
+  describe "#__DIR__" do
+    it "should return the directory of the present file" do
+      __DIR__.should == File.dirname(File.expand_path(__FILE__))
+    end
+    
+    it "should work regardless of the present working directory" do
+      Dir.chdir('..') do
+        __DIR__.should == File.dirname(File.expand_path(__FILE__))
+      end
+    end
+  end
 end
 
