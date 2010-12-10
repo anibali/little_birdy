@@ -15,5 +15,21 @@ describe Kernel do
       expect { Symbol([]) }.to raise_exception(TypeError)
     end
   end
+  
+  describe "#try_require" do
+    it "should return false when a library is missing" do
+      try_require('_no_such_library_').should be_false
+    end
+    
+    it "should return true when a library has been loaded previously" do
+      require 'little_birdy'
+      try_require('little_birdy').should be_true
+    end
+    
+    it "should return true when a library successfully loads" do
+      $".delete 'little_birdy.rb'
+      try_require('little_birdy').should be_true
+    end
+  end
 end
 
